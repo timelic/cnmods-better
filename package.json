@@ -1,0 +1,19 @@
+{
+  "name": "cnmods-vite",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.23",
+    "vue-router": "^4.0.12"
+  },
+  "devDependencies": {
+    "@vicons/fluent": "^0.11.0",
+    "@vitejs/plugin-vue": "^1.10.2",
+    "naive-ui": "^2.21.5",
+    "vite": "^2.7.0"
+  }
+}
