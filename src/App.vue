@@ -26,7 +26,7 @@
 				</n-icon>
 				<span>投稿</span>
 			</span>
-			<span class="sidebar-item info">
+			<span class="sidebar-item info" @click="toPage('About')">
 				<n-icon size="24">
 					<info />
 				</n-icon>

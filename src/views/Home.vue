@@ -18,7 +18,6 @@
 		编辑推荐
 	</div>
 	<div id="card-wrap">
-		<span class="card" v-if="index_data.length" v-for="x in 7"></span>
 		<span
 			class="card"
 			v-for="item in commandModuleList"

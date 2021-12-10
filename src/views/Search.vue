@@ -1,5 +1,10 @@
 <template>
-	<n-input id="real-search" placeholder="搜索" @focus="toPage('Search')">
+	<n-input
+		id="real-search"
+		placeholder="搜索"
+		@focus="toPage('Search')"
+		:autofocus="true"
+	>
 		<template #suffix>
 			<n-icon @click="search" style="cursor: pointer">
 				<search-icon />
