@@ -136,7 +136,7 @@ body {
 	justify-content: center;
 	align-items: center;
 }
-.n-input {
+#header .n-input {
 	width: 379px !important;
 }
 .sidebar-item {
@@ -193,7 +193,7 @@ body {
 	.n-carousel {
 		--width: 830px;
 		width: var(--width);
-		height: 207px;
+		height: calc(var(--width) / 4);
 		margin-left: calc((100% - var(--width)) / 2);
 	}
 }
@@ -358,5 +358,79 @@ body {
 }
 #main {
 	min-height: calc(100vh - 80px - 4rem);
+}
+@media (max-width: 768px) {
+	/* 这应该包括了ipad普通版在内的所有手机端 */
+	#sidebar {
+		display: none;
+	}
+	#sidebar + div {
+		width: 100%;
+		background-color: #111;
+		position: fixed;
+		left: 0;
+		overflow-y: scroll;
+		height: 100vh;
+		min-height: 100vh;
+	}
+	#card-wrap {
+		display: flex;
+		flex-direction: column;
+		grid-template-columns: repeat(3, 33.33%);
+		width: 100%;
+		margin: 30px auto;
+		align-items: center;
+	}
+	.card {
+		width: calc(100% - 20px);
+		height: 230px;
+		margin: 0;
+		margin-bottom: 10px;
+		overflow: hidden;
+	}
+	.n-carousel {
+		--width: 500px;
+		width: var(--width);
+		height: calc(var(--width) / 4);
+		margin-left: calc((100% - var(--width)) / 2);
+	}
+	#header .n-input {
+		width: calc(100% - 20px) !important;
+	}
+	.carousel-mask {
+		display: none;
+	}
+	.carousel-mask > div {
+		/* hover mask 可以显示文字 */
+		font-size: 1rem;
+		color: transparent !important;
+	}
+	.back {
+		display: none;
+	}
+	#real-search {
+		width: calc(100% - 20px) !important;
+		margin-left: 10px !important;
+	}
+	.search-options {
+		display: flex;
+		flex-wrap: wrap;
+		width: calc(100% - 20px) !important;
+		margin: none;
+		padding-left: 0 !important;
+	}
+	.search-options > * {
+		margin-bottom: 10px;
+	}
+	.search-options + #card-wrap {
+		margin-top: 10px;
+	}
+	.tags-wrap {
+		overflow: hidden;
+	}
+	#module-wrap {
+		width: calc(100% - 40px) !important;
+		padding-top: 40px !important;
+	}
 }
 </style>
