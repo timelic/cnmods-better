@@ -88,6 +88,15 @@
 					</div>
 					<div
 						class="mobile-header-expand-item"
+						@click="toPage('About')"
+					>
+						<n-icon size="20" class="mobile-icon">
+							<info />
+						</n-icon>
+						<span>关于</span>
+					</div>
+					<div
+						class="mobile-header-expand-item"
 						v-for="item in advertisementList"
 						@click="toUrl(item.linkUr)"
 					>
