@@ -12,13 +12,9 @@
 		</div>
 	</n-carousel>
 	<img
-		src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f419/u1f419_u1f9a0.png"
-		style="
-			height: 150px;
-			margin: 20px auto;
-			display: block;
-			filter: brightness(0.9);
-		"
+		src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f419/u1f419_u1f31c.png"
+		style="height: 150px; margin: 20px auto; filter: brightness(0.9)"
+		class="only-show-on-mobile"
 	/>
 	<div class="subtitle">
 		<n-icon size="20" class="recommend-icon">

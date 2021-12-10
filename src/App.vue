@@ -442,6 +442,9 @@ body {
 #mobile-header {
 	display: none;
 }
+.only-show-on-mobile {
+	display: none;
+}
 @media (max-width: 900px) {
 	/* 这应该包括了ipad普通版在内的所有手机端 */
 	#sidebar {
@@ -550,6 +553,9 @@ body {
 	}
 	#main {
 		padding: 10px 0;
+	}
+	.only-show-on-mobile {
+		display: block;
 	}
 }
 </style>
