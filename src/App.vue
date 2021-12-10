@@ -34,6 +34,66 @@
 			</span>
 		</div>
 		<div>
+			<div id="mobile-header">
+				<n-icon size="20" class="mobile-icon" @click="toPage('Home')">
+					<home-regular />
+				</n-icon>
+				<n-icon
+					size="20"
+					class="mobile-icon search"
+					@click="toPage('Search')"
+				>
+					<search-icon />
+				</n-icon>
+				<n-icon
+					size="20"
+					class="mobile-icon nav"
+					@click="switchExpandMenu"
+				>
+					<navigation />
+				</n-icon>
+			</div>
+			<div
+				id="mobile-header-expand"
+				:style="
+					showExpandMenu
+						? `height:${
+								(2 + advertisementList.length) * 40 + 10
+						  }px;`
+						: null
+				"
+			>
+				<div
+					class="mobile-header-expand-item"
+					@click="toUrl('https://cnmods.gitbook.io/practice/')"
+				>
+					<n-icon size="20" class="mobile-icon">
+						<book />
+					</n-icon>
+					<span>专题</span>
+				</div>
+				<div
+					class="mobile-header-expand-item"
+					@click="
+						toUrl('https://www.cnmods.net/#/moduleDetail/tougao')
+					"
+				>
+					<n-icon size="20" class="mobile-icon">
+						<upload />
+					</n-icon>
+					<span>投稿</span>
+				</div>
+				<div
+					class="mobile-header-expand-item"
+					v-for="item in advertisementList"
+					@click="toUrl(item.linkUr)"
+				>
+					<n-icon size="20" class="mobile-icon">
+						<news />
+					</n-icon>
+					<span>{{ item.title }}</span>
+				</div>
+			</div>
 			<div id="header">
 				<n-icon
 					class="back normal-click"
@@ -68,12 +128,16 @@ import { darkTheme } from "naive-ui";
 import {
 	Search24Regular as SearchIcon,
 	Home24Filled as home,
+	Home24Regular as HomeRegular,
 	BookStar24Filled as book,
 	CloudBackup48Filled as upload,
 	Info24Filled as info,
 	ArrowLeft20Filled as back,
+	Navigation24Regular as navigation,
+	News24Regular as news,
 } from "@vicons/fluent";
 import { useRouter, useRoute } from "vue-router";
+import { ref } from "vue";
 const router = useRouter();
 const route = useRoute();
 function toPage(name, query) {
@@ -85,6 +149,18 @@ function toPage(name, query) {
 function toUrl(url) {
 	window.open(url);
 }
+const showExpandMenu = ref(false);
+function switchExpandMenu() {
+	showExpandMenu.value = !showExpandMenu.value;
+}
+// 获取tm的轮播图列表
+const advertisementList = ref({});
+(async () => {
+	const resp = await fetch("https://www.cnmods.net/index.do").then(
+		(response) => response.json()
+	);
+	advertisementList.value = resp.data.advertisementList;
+})();
 </script>
 
 <style>
@@ -265,10 +341,10 @@ body {
 }
 .subtitle {
 	text-align: center;
-	font-size: 1.5rem;
+	font-size: 1.25rem;
 	line-height: 2rem;
 	margin-top: 30px;
-	transform: scaleX(0.9);
+	/* transform: scaleX(0.9); */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -359,6 +435,13 @@ body {
 #main {
 	min-height: calc(100vh - 80px - 4rem);
 }
+#mobile-header {
+	display: none;
+}
+#mobile-header-expand {
+	height: 0;
+	overflow: hidden;
+}
 @media (max-width: 768px) {
 	/* 这应该包括了ipad普通版在内的所有手机端 */
 	#sidebar {
@@ -376,9 +459,8 @@ body {
 	#card-wrap {
 		display: flex;
 		flex-direction: column;
-		grid-template-columns: repeat(3, 33.33%);
 		width: 100%;
-		margin: 30px auto;
+		margin: 20px auto;
 		align-items: center;
 	}
 	.card {
@@ -387,23 +469,17 @@ body {
 		margin: 0;
 		margin-bottom: 10px;
 		overflow: hidden;
+		padding: 15px;
+		height: 225px;
 	}
 	.n-carousel {
-		--width: 500px;
-		width: var(--width);
-		height: calc(var(--width) / 4);
-		margin-left: calc((100% - var(--width)) / 2);
-	}
-	#header .n-input {
-		width: calc(100% - 20px) !important;
-	}
-	.carousel-mask {
 		display: none;
 	}
-	.carousel-mask > div {
-		/* hover mask 可以显示文字 */
-		font-size: 1rem;
-		color: transparent !important;
+	#header .n-input {
+		/* width: calc(100% - 20px) !important; */
+	}
+	#header {
+		display: none;
 	}
 	.back {
 		display: none;
@@ -431,6 +507,48 @@ body {
 	#module-wrap {
 		width: calc(100% - 40px) !important;
 		padding-top: 40px !important;
+	}
+	#mobile-header {
+		height: 50px;
+		background: #1c1c1c;
+		display: block;
+		display: flex;
+		align-items: center;
+		padding: 0 15px;
+	}
+	.mobile-icon.nav {
+		margin-left: 10px;
+	}
+	.mobile-icon.search {
+		margin-left: auto;
+	}
+	#mobile-header-expand {
+		background: #1c1c1c;
+		height: 0;
+		overflow: hidden;
+		transition: 0.3s ease-out;
+	}
+	.mobile-header-expand-item {
+		display: flex;
+		align-items: center;
+		height: 40px;
+		padding: 0 15px;
+	}
+	.mobile-header-expand-item .n-icon {
+		margin-right: 30px;
+	}
+	.subtitle {
+		margin-top: 20px;
+	}
+	.module-title {
+		font-size: 2.5rem !important;
+	}
+	#real-search {
+		position: relative !important;
+		top: 0 !important;
+	}
+	#main {
+		padding: 10px 0;
 	}
 }
 </style>

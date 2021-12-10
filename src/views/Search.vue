@@ -235,6 +235,7 @@ const pageSizes = ref([18, 24, 36]);
 	margin: auto;
 	margin-left: calc((100% - 379px) / 2);
 	position: absolute;
+	width: 379px;
 	top: calc((80px - 34px) / 2);
 }
 .n-pagination {

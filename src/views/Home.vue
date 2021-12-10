@@ -12,12 +12,13 @@
 		</div>
 	</n-carousel>
 	<div class="subtitle">
-		<n-icon size="22">
+		<n-icon size="20" class="recommend-icon">
 			<like />
 		</n-icon>
 		编辑推荐
 	</div>
 	<div id="card-wrap">
+		<span class="card" v-if="index_data.length" v-for="x in 7"></span>
 		<span
 			class="card"
 			v-for="item in commandModuleList"
@@ -109,15 +110,10 @@
 
 <script setup>
 import {
-	Search24Regular as SearchIcon,
-	Home24Filled as home,
-	BookStar24Filled as book,
-	CloudBackup48Filled as upload,
-	Info24Filled as info,
-	ThumbLike24Regular as like,
+	// ThumbLike24Regular as like,
+	FlashOn24Regular as like,
 	New24Regular as news,
 	Star24Regular as star,
-	Star24Filled as StarFill,
 } from "@vicons/fluent";
 import { ref } from "vue";
 const index_data = ref({});
@@ -135,7 +131,6 @@ const commandModuleList = ref({});
 
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
-const route = useRoute();
 
 function toPageByPath(path) {
 	router.push(path);
@@ -146,4 +141,9 @@ function toUrl(url) {
 }
 </script>
 
-<style></style>
+<style scoped>
+.recommend-icon {
+	position: relative;
+	top: 1px;
+}
+</style>
