@@ -1,5 +1,5 @@
 <template>
-	<n-carousel autoplay show-arrow trigger="hover">
+	<n-carousel autoplay show-arrow trigger="hover" style="background: #222">
 		<div
 			v-for="item in advertisementList"
 			:key="item.keyId"
@@ -11,6 +11,15 @@
 			<img class="carousel-img" :src="item.picUrl" />
 		</div>
 	</n-carousel>
+	<img
+		src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f419/u1f419_u1f9a0.png"
+		style="
+			height: 150px;
+			margin: 20px auto;
+			display: block;
+			filter: brightness(0.9);
+		"
+	/>
 	<div class="subtitle">
 		<n-icon size="20" class="recommend-icon">
 			<like />
@@ -18,6 +27,12 @@
 		编辑推荐
 	</div>
 	<div id="card-wrap">
+		<!-- 这个是骨架之类的玩意 -->
+		<span
+			class="card"
+			v-for="x in 7"
+			v-if="!Object.keys(index_data).length"
+		></span>
 		<span
 			class="card"
 			v-for="item in commandModuleList"

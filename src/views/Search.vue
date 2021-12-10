@@ -2,11 +2,13 @@
 	<n-input
 		id="real-search"
 		placeholder="搜索"
-		@focus="toPage('Search')"
 		:autofocus="true"
+		v-model:value="input_value"
+		:input-props="{ type: 'search' }"
+		@keyup.enter="search"
 	>
 		<template #suffix>
-			<n-icon @click="search" style="cursor: pointer">
+			<n-icon @click="search" style="cursor: pointer" class="search-icon">
 				<search-icon />
 			</n-icon>
 		</template>
@@ -50,6 +52,11 @@
 		</n-radio-group>
 	</div>
 	<div id="card-wrap">
+		<span
+			class="card"
+			v-for="x in 18"
+			v-if="!Object.keys(search_result).length"
+		></span>
 		<span
 			class="card"
 			v-for="item in search_result"
@@ -103,6 +110,9 @@
 <script setup>
 import { Search24Regular as SearchIcon } from "@vicons/fluent";
 import { ref } from "vue";
+import { useLoadingBar } from "naive-ui";
+const loadingBar = useLoadingBar();
+
 const search_result = ref({});
 
 const player_num = ref("");
@@ -122,6 +132,8 @@ const updateLastWeek = ref(null);
 let flag_updateLastWeek = false;
 const recommended = ref(null);
 let flag_recommended = false;
+
+const input_value = ref("");
 
 function handleBtn(p) {
 	// 一个写的很烂的东西 但是能用 这是为了用好看的按钮的妥协
@@ -143,6 +155,7 @@ function toPageByPath(path) {
 }
 
 async function search() {
+	loadingBar.start(); // 启动加载条
 	const data = {
 		moduleAge: "",
 		occurrencePlace: "",
@@ -153,7 +166,7 @@ async function search() {
 		moduleVersion: "",
 		freeLevel: "",
 		structure: "",
-		title: "",
+		title: input_value.value,
 		page: 1,
 		pageSize: 18,
 		moduleType: "",
@@ -170,6 +183,7 @@ async function search() {
 	console.log(resp);
 	search_result.value = resp.data.list;
 	totalElements.value = resp.data.totalElements;
+	loadingBar.finish(); // 结束加载条
 }
 
 // 分页的逻辑
@@ -255,5 +269,16 @@ const pageSizes = ref([18, 24, 36]);
 	width: 14px !important;
 	height: 14px !important;
 	filter: brightness(0.8);
+}
+/* 搜索按钮加上动画 */
+.search-icon {
+	transition: 0.2s !important;
+}
+.search-icon:hover {
+	transform: scale(1.2);
+}
+.search-icon:active {
+	transform: scale(1);
+	opacity: 0.5;
 }
 </style>

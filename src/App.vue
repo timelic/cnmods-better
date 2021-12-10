@@ -1,125 +1,129 @@
 <template>
 	<n-config-provider :theme="darkTheme">
-		<div id="sidebar">
-			<img src="" id="logo" />
-			<span class="sidebar-item" @click="toPage('Home')">
-				<n-icon size="24">
-					<home />
-				</n-icon>
-				<span>首页</span>
-			</span>
-			<span
-				class="sidebar-item"
-				@click="toUrl('https://cnmods.gitbook.io/practice/')"
-			>
-				<n-icon size="24">
-					<book />
-				</n-icon>
-				<span>专题</span>
-			</span>
-			<span
-				class="sidebar-item"
-				@click="toUrl('https://www.cnmods.net/#/moduleDetail/tougao')"
-			>
-				<n-icon size="24">
-					<upload />
-				</n-icon>
-				<span>投稿</span>
-			</span>
-			<span class="sidebar-item info" @click="toPage('About')">
-				<n-icon size="24">
-					<info />
-				</n-icon>
-				<span>关于</span>
-			</span>
-		</div>
-		<div>
-			<div id="mobile-header">
-				<n-icon size="20" class="mobile-icon" @click="toPage('Home')">
-					<home-regular />
-				</n-icon>
-				<n-icon
-					size="20"
-					class="mobile-icon search"
-					@click="toPage('Search')"
-				>
-					<search-icon />
-				</n-icon>
-				<n-icon
-					size="20"
-					class="mobile-icon nav"
-					@click="switchExpandMenu"
-				>
-					<navigation />
-				</n-icon>
-			</div>
-			<div
-				id="mobile-header-expand"
-				:style="
-					showExpandMenu
-						? `height:${
-								(2 + advertisementList.length) * 40 + 10
-						  }px;`
-						: null
-				"
-			>
-				<div
-					class="mobile-header-expand-item"
+		<n-loading-bar-provider>
+			<div id="sidebar">
+				<img src="" id="logo" />
+				<span class="sidebar-item" @click="toPage('Home')">
+					<n-icon size="24">
+						<home />
+					</n-icon>
+					<span>首页</span>
+				</span>
+				<span
+					class="sidebar-item"
 					@click="toUrl('https://cnmods.gitbook.io/practice/')"
 				>
-					<n-icon size="20" class="mobile-icon">
+					<n-icon size="24">
 						<book />
 					</n-icon>
 					<span>专题</span>
-				</div>
-				<div
-					class="mobile-header-expand-item"
+				</span>
+				<span
+					class="sidebar-item"
 					@click="
 						toUrl('https://www.cnmods.net/#/moduleDetail/tougao')
 					"
 				>
-					<n-icon size="20" class="mobile-icon">
+					<n-icon size="24">
 						<upload />
 					</n-icon>
 					<span>投稿</span>
-				</div>
-				<div
-					class="mobile-header-expand-item"
-					v-for="item in advertisementList"
-					@click="toUrl(item.linkUr)"
-				>
-					<n-icon size="20" class="mobile-icon">
-						<news />
+				</span>
+				<span class="sidebar-item info" @click="toPage('About')">
+					<n-icon size="24">
+						<info />
 					</n-icon>
-					<span>{{ item.title }}</span>
+					<span>关于</span>
+				</span>
+			</div>
+			<div>
+				<div id="mobile-header">
+					<n-icon
+						size="20"
+						class="mobile-icon"
+						@click="toPage('Home')"
+					>
+						<home-regular />
+					</n-icon>
+					<n-icon
+						size="20"
+						class="mobile-icon search"
+						@click="toPage('Search')"
+					>
+						<search-icon />
+					</n-icon>
+					<n-icon
+						size="20"
+						class="mobile-icon nav"
+						@click="switchExpandMenu"
+					>
+						<navigation />
+					</n-icon>
 				</div>
-			</div>
-			<div id="header">
-				<n-icon
-					class="back normal-click"
-					size="20"
-					@click="router.go(-1)"
-					v-if="route.path !== '/'"
+				<n-collapse-transition
+					:show="showExpandMenu"
+					style="background: #1c1c1c"
 				>
-					<back />
-				</n-icon>
-				<n-input
-					placeholder="搜索"
-					@focus="toPage('Search')"
-					v-if="route.path !== '/search'"
-				>
-					<template #suffix>
-						<n-icon>
-							<search-icon />
+					<div
+						class="mobile-header-expand-item"
+						@click="toUrl('https://cnmods.gitbook.io/practice/')"
+					>
+						<n-icon size="20" class="mobile-icon">
+							<book />
 						</n-icon>
-					</template>
-				</n-input>
+						<span>专题</span>
+					</div>
+					<div
+						class="mobile-header-expand-item"
+						@click="
+							toUrl(
+								'https://www.cnmods.net/#/moduleDetail/tougao'
+							)
+						"
+					>
+						<n-icon size="20" class="mobile-icon">
+							<upload />
+						</n-icon>
+						<span>投稿</span>
+					</div>
+					<div
+						class="mobile-header-expand-item"
+						v-for="item in advertisementList"
+						@click="toUrl(item.linkUr)"
+					>
+						<n-icon size="20" class="mobile-icon">
+							<news />
+						</n-icon>
+						<span>{{ item.title }}</span>
+					</div>
+				</n-collapse-transition>
+				<div id="header">
+					<n-icon
+						class="back normal-click"
+						size="20"
+						@click="router.go(-1)"
+						v-if="route.path !== '/'"
+					>
+						<back />
+					</n-icon>
+					<n-input
+						placeholder="搜索"
+						@focus="toPage('Search')"
+						v-if="route.path !== '/search'"
+					>
+						<template #suffix>
+							<n-icon>
+								<search-icon />
+							</n-icon>
+						</template>
+					</n-input>
+				</div>
+				<div id="main">
+					<router-view></router-view>
+				</div>
+				<div id="footer">This is a footer.</div>
 			</div>
-			<div id="main">
-				<router-view></router-view>
-			</div>
-			<div id="footer">This is a footer.</div>
-		</div>
+		</n-loading-bar-provider>
 	</n-config-provider>
 </template>
 
@@ -438,10 +442,6 @@ body {
 #mobile-header {
 	display: none;
 }
-#mobile-header-expand {
-	height: 0;
-	overflow: hidden;
-}
 @media (max-width: 900px) {
 	/* 这应该包括了ipad普通版在内的所有手机端 */
 	#sidebar {
@@ -472,6 +472,7 @@ body {
 		overflow: hidden;
 		padding: 15px;
 		height: 225px;
+		background: #1d1d1d;
 	}
 	.n-carousel {
 		display: none;
@@ -523,17 +524,16 @@ body {
 	.mobile-icon.search {
 		margin-left: auto;
 	}
-	#mobile-header-expand {
-		background: #1c1c1c;
-		height: 0;
-		overflow: hidden;
-		transition: 0.3s ease-out;
-	}
 	.mobile-header-expand-item {
 		display: flex;
 		align-items: center;
 		height: 40px;
 		padding: 0 15px;
+	}
+	.mobile-header-expand-item:last-of-type {
+		height: 50px;
+		padding-bottom: 10px;
+		/* 让最下方有一点视觉上的空余 */
 	}
 	.mobile-header-expand-item .n-icon {
 		margin-right: 30px;
