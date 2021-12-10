@@ -442,7 +442,7 @@ body {
 	height: 0;
 	overflow: hidden;
 }
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 	/* 这应该包括了ipad普通版在内的所有手机端 */
 	#sidebar {
 		display: none;
@@ -465,6 +465,7 @@ body {
 	}
 	.card {
 		width: calc(100% - 20px);
+		max-width: 500px;
 		height: 230px;
 		margin: 0;
 		margin-bottom: 10px;
