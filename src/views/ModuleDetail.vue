@@ -105,11 +105,17 @@ import {
 	Mail24Filled as mail,
 } from "@vicons/fluent";
 
+import { useLoadingBar } from "naive-ui";
+const loadingBar = useLoadingBar();
+
 const keyId = route.params.keyId;
 const module_data = ref({});
 
 const other_module = ref([]);
+
+// 获取数据
 (async () => {
+	loadingBar.start(); // 启动加载条
 	const resp = await fetch(
 		`https://www.cnmods.net/index/moduleDetail.do?keyId=${keyId}`
 	).then((response) => response.json());

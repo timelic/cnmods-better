@@ -519,10 +519,10 @@ body {
 		display: block;
 		display: flex;
 		align-items: center;
-		padding: 0 15px;
+		padding: 0 17.5px;
 	}
 	.mobile-icon.nav {
-		margin-left: 10px;
+		margin-left: 15px;
 	}
 	.mobile-icon.search {
 		margin-left: auto;
