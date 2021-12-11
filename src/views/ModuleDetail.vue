@@ -126,6 +126,7 @@ const other_module = ref([]);
 		`https://www.cnmods.net/index/articleModules.do?keyId=${keyId}`
 	).then((response) => response.json());
 	other_module.value = res.data;
+	loadingBar.finish(); // 启动加载条
 })();
 function toUrl(url) {
 	window.open(url);
