@@ -44,12 +44,26 @@
 			/>
 			<span>{{ player_hours }} 时</span>
 		</div>
-		<n-radio-group v-model:value="updateLastWeek" @click="handleBtn">
-			<n-radio-button value="上周更新">上周更新</n-radio-button>
-		</n-radio-group>
-		<n-radio-group v-model:value="recommended" @click="handleBtn(flase)">
-			<n-radio-button value="编辑推荐">编辑推荐</n-radio-button>
-		</n-radio-group>
+		<div class="updateLastWeek-recommend-wrap">
+			<span
+				class="updateLastWeek-recommend-item"
+				:class="
+					updateLastWeek
+						? 'updateLastWeek-recommend-item-active'
+						: unll
+				"
+				@click="handleBtn(true)"
+				>上周更新</span
+			>
+			<span
+				class="updateLastWeek-recommend-item"
+				:class="
+					recommended ? 'updateLastWeek-recommend-item-active' : unll
+				"
+				@click="handleBtn()"
+				>编辑推荐</span
+			>
+		</div>
 	</div>
 	<div id="card-wrap">
 		<span
@@ -106,6 +120,13 @@
 		show-size-picker
 		:page-sizes="[18, 36]"
 		show-quick-jumper
+		class="flex only-show-on-large-screen"
+	/>
+	<n-pagination
+		v-model:page="page"
+		:item-count="totalElements"
+		:page-slot="5"
+		class="only-show-on-mobile flex"
 	/>
 </template>
 
@@ -130,21 +151,21 @@ const source_list = [
 ];
 const selected_catagory = ref(null);
 const source_catagory = ref(null);
+
 const updateLastWeek = ref(null);
-let flag_updateLastWeek = false;
 const recommended = ref(null);
-let flag_recommended = false;
 
 const input_value = ref("");
 
 function handleBtn(p) {
 	// 一个写的很烂的东西 但是能用 这是为了用好看的按钮的妥协
+	// 这么写是为了它可能为空
 	if (p) {
-		flag_updateLastWeek = !flag_updateLastWeek;
-		if (flag_updateLastWeek) updateLastWeek.value = null;
+		if (updateLastWeek.value) updateLastWeek.value = false;
+		else updateLastWeek.value = true;
 	} else {
-		flag_recommended = !flag_recommended;
-		if (flag_recommended) recommended.value = null;
+		if (recommended.value) recommended.value = false;
+		else recommended.value = true;
 	}
 	console.log("click");
 	search();
@@ -182,7 +203,7 @@ async function search() {
 		.reduce((total, item) => total + "&" + item);
 	const url = `https://www.cnmods.net/index/moduleListPage.do?${data_str}`;
 	const resp = await fetch(url).then((response) => response.json());
-	console.log(resp);
+	console.log(url);
 	search_result.value = resp.data.list;
 	totalElements.value = resp.data.totalElements;
 	loadingBar.finish(); // 结束加载条
@@ -264,6 +285,38 @@ watch(pageSize, search);
 .n-pagination {
 	margin-bottom: 60px;
 	justify-content: center;
+}
+.updateLastWeek-recommend-wrap {
+	display: flex;
+	flex-grow: 1;
+	margin-right: 5px;
+	justify-content: space-between !important;
+	/* 魔鬼数字 */
+}
+.updateLastWeek-recommend-item {
+	width: calc((100% - 10px) / 2) !important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #aaa;
+	background: transparent;
+	align-items: center;
+	border: 1px solid rgba(255, 255, 255, 0.24);
+	border-radius: 3px;
+	height: 34px;
+	min-width: 4rem;
+	transition: 0.2s;
+	cursor: pointer;
+}
+.updateLastWeek-recommend-item:hover {
+	border: 1px solid #63e2b7;
+	color: #63e2b7;
+	background-color: #122;
+}
+.updateLastWeek-recommend-item-active {
+	color: black;
+	border: 1px solid #63e2b7;
+	background: #63e2b7;
 }
 </style>
 

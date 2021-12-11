@@ -116,6 +116,16 @@
 			</div>
 		</span>
 	</div>
+	<div class="search-more-modes-wrap">
+		<n-button class="search-more-modes" @click="toPage('Search')">
+			<template #icon>
+				<n-icon>
+					<like />
+				</n-icon>
+			</template>
+			搜索更多</n-button
+		>
+	</div>
 </template>
 
 <script setup>
@@ -149,11 +159,28 @@ function toPageByPath(path) {
 function toUrl(url) {
 	window.open(url);
 }
+
+function toPage(name, query) {
+	router.push({
+		name,
+		query,
+	});
+}
 </script>
 
 <style scoped>
 .recommend-icon {
 	position: relative;
 	top: 1px;
+}
+.search-more-modes {
+	margin: auto;
+	/* display: block; */
+	position: relative;
+	margin-bottom: 30px;
+}
+.search-more-modes-wrap {
+	display: flex;
+	justify-content: center;
 }
 </style>

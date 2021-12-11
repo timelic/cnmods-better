@@ -463,6 +463,10 @@ body {
 .only-show-on-mobile {
 	display: none;
 }
+.only-show-on-large-screen {
+	display: flex;
+}
+
 @media (max-width: 900px) {
 	/* 这应该包括了ipad普通版在内的所有手机端 */
 	#sidebar {
@@ -486,7 +490,6 @@ body {
 	}
 	.card {
 		width: calc(100% - 20px);
-		max-width: 500px;
 		height: 230px;
 		margin: 0;
 		margin-bottom: 10px;
@@ -494,6 +497,17 @@ body {
 		padding: 15px;
 		height: 225px;
 		background: #1d1d1d;
+	}
+	.search-options,
+	.card {
+		max-width: 500px;
+	}
+	.search-options > * {
+		flex-grow: 1;
+		/* margin-right: 0 !important; */
+	}
+	.updateLastWeek-recommend-wrap > * {
+		/* margin-right: 0; */
 	}
 	.n-carousel {
 		display: none;
@@ -573,7 +587,10 @@ body {
 		padding: 10px 0;
 	}
 	.only-show-on-mobile {
-		display: block;
+		display: flex;
+	}
+	.only-show-on-large-screen {
+		display: none !important;
 	}
 }
 </style>
