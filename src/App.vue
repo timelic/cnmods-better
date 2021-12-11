@@ -175,8 +175,11 @@ const showExpandMenu = ref(false);
 function switchExpandMenu() {
 	showExpandMenu.value = !showExpandMenu.value;
 }
-// 获取tm的轮播图列表
+// ANCHOR 获取tm的轮播图列表
 const advertisementList = ref({});
+
+// ANCHOR 自执行方法
+//
 (async () => {
 	const resp = await fetch("https://www.cnmods.net/index.do").then(
 		(response) => response.json()
@@ -522,8 +525,14 @@ body {
 		display: none;
 	}
 	#real-search {
-		width: calc(100% - 20px) !important;
-		margin-left: 10px !important;
+		position: relative;
+		display: flex;
+		width: 500px !important;
+		max-width: calc(100% - 20px) !important;
+		/* max-width: 500px !important; */
+		/* margin-left: 10px !important; */
+		/* margin-right: 0 !important; */
+		margin: auto !important;
 	}
 	.search-options {
 		display: flex;
@@ -564,6 +573,7 @@ body {
 		align-items: center;
 		height: 40px;
 		padding: 0 15px;
+		cursor: pointer;
 	}
 	.mobile-header-expand-item:last-of-type {
 		height: 50px;
