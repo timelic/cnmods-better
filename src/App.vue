@@ -1,5 +1,5 @@
 <template>
-	<n-config-provider :theme="darkTheme">
+	<n-config-provider :theme="darkTheme" :locale="zhCN">
 		<n-loading-bar-provider>
 			<div id="sidebar">
 				<img src="" id="logo" />
@@ -28,6 +28,12 @@
 						<upload />
 					</n-icon>
 					<span>投稿</span>
+				</span>
+				<span class="sidebar-item">
+					<n-icon size="24">
+						<star />
+					</n-icon>
+					<span>收藏</span>
 				</span>
 				<span class="sidebar-item info" @click="toPage('About')">
 					<n-icon size="24">
@@ -148,9 +154,12 @@ import {
 	ArrowLeft20Filled as back,
 	Navigation24Regular as navigation,
 	News24Regular as news,
+	Star24Filled as star,
 } from "@vicons/fluent";
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
+import { zhCN } from "naive-ui";
+
 const router = useRouter();
 const route = useRoute();
 function toPage(name, query) {

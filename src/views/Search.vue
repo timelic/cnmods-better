@@ -101,15 +101,17 @@
 	</div>
 	<n-pagination
 		v-model:page="page"
-		show-size-picker
-		:page-sizes="pageSizes"
+		v-model:page-size="pageSize"
 		:item-count="totalElements"
+		show-size-picker
+		:page-sizes="[18, 36]"
+		show-quick-jumper
 	/>
 </template>
 
 <script setup>
 import { Search24Regular as SearchIcon } from "@vicons/fluent";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useLoadingBar } from "naive-ui";
 const loadingBar = useLoadingBar();
 
@@ -167,8 +169,8 @@ async function search() {
 		freeLevel: "",
 		structure: "",
 		title: input_value.value,
-		page: 1,
-		pageSize: 18,
+		page: page.value,
+		pageSize: pageSize.value,
 		moduleType: "",
 		updateLastWeek: Boolean(updateLastWeek.value) || "",
 		command: Boolean(recommended.value) || "",
@@ -191,7 +193,9 @@ async function search() {
 const page = ref(1);
 const pageSize = ref(18);
 const totalElements = ref();
-const pageSizes = ref([18, 24, 36]);
+
+watch(page, search);
+watch(pageSize, search);
 (async () => {
 	search();
 })();
