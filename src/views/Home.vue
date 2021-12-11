@@ -11,9 +11,15 @@
 			<img class="carousel-img" :src="item.picUrl" />
 		</div>
 	</n-carousel>
+	<!-- 手机版显示一张头图 -->
 	<img
 		src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f419/u1f419_u1f31c.png"
-		style="height: 150px; margin: 20px auto; filter: brightness(0.9)"
+		style="
+			height: 150px;
+			margin: 20px auto;
+			filter: brightness(0.9);
+			user-select: none;
+		"
 		class="only-show-on-mobile"
 	/>
 	<div class="subtitle">

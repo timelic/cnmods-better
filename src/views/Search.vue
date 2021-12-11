@@ -228,15 +228,17 @@ watch(pageSize, search);
 	width: 840px;
 	margin: 10px auto 0;
 	padding-left: 5px;
+	justify-content: space-between;
 }
 .search-options > * {
 	margin-right: 10px;
+	/* flex-shrink: 1; */
 }
 .n-select {
-	width: 100px;
+	flex-basis: 100px;
 }
 .slider-wrap {
-	width: 220px;
+	flex-basis: 220px;
 	display: flex;
 	color: #ccc;
 	background: #292929;
