@@ -126,7 +126,7 @@
 		<n-button class="search-more-modes" @click="toPage('Search')">
 			<template #icon>
 				<n-icon>
-					<like />
+					<SearchIcon />
 				</n-icon>
 			</template>
 			搜索更多</n-button
@@ -140,6 +140,7 @@ import {
 	FlashOn24Regular as like,
 	New24Regular as news,
 	Star24Regular as star,
+	Search16Filled as SearchIcon,
 } from "@vicons/fluent";
 import { ref } from "vue";
 const index_data = ref({});

@@ -230,6 +230,7 @@ body {
 	overflow-y: scroll;
 	height: 100vh;
 	min-height: 100vh;
+	background-image: radial-gradient(closest-corner at 50% 30%, #2d2d2d, #111);
 }
 #header {
 	height: 80px;
@@ -477,12 +478,7 @@ body {
 	}
 	#sidebar + div {
 		width: 100%;
-		background-color: #111;
-		position: fixed;
 		left: 0;
-		overflow-y: scroll;
-		height: 100vh;
-		min-height: 100vh;
 	}
 	#card-wrap {
 		display: flex;
@@ -601,6 +597,10 @@ body {
 	}
 	.only-show-on-large-screen {
 		display: none !important;
+	}
+	div:hover,
+	span:hover {
+		border: none !important;
 	}
 }
 </style>
