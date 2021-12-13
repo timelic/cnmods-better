@@ -10,12 +10,28 @@
 			{{ module_data.module.opinion }}
 		</div>
 
+		<!-- ANCHOR 原生 -->
 		<span class="download-btn" @click="toUrl(module_data.module.url)">
 			<n-icon size="18">
 				<download />
 			</n-icon>
 			<span>下载</span>
 		</span>
+
+		<!-- naiveui按钮  -->
+		<!-- <n-button
+			type="primary"
+			round
+			class="download-btn-new"
+			@click="toUrl(module_data.module.url)"
+		>
+			<template #icon>
+				<n-icon>
+					<download />
+				</n-icon>
+			</template>
+			下载
+		</n-button> -->
 
 		<div class="module-part">
 			<div class="module-part-subtitle">推荐语</div>
@@ -193,8 +209,17 @@ function toUrl(url) {
 	transition: 0.2s;
 	user-select: none;
 }
+.download-btn-new {
+	margin: 50px auto 60px;
+	transition: 0.2s;
+}
+.download-btn-new:active {
+	transform: scale(0.95);
+}
 .download-btn:hover {
-	filter: brightness(1.1);
+	/* filter: brightness(1.1); */
+	background: #7fe7c4;
+	color: black;
 }
 .download-btn:active {
 	transform: scale(0.95);

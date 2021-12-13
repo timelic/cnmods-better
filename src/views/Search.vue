@@ -14,10 +14,19 @@
 		</template>
 	</n-input>
 	<div class="search-options">
-		<n-select
+		<!-- <n-select
 			placeholder="类别"
 			v-model:value="selected_catagory"
 			:options="catagory_list"
+		/> -->
+		<!-- ANCHOR 级联选择 HTML -->
+		<n-cascader
+			v-model:value="selected_catagory"
+			placeholder="类别"
+			:options="options"
+			:leaf-only="false"
+			:on-blur="handleSelectedCatagoryBlur"
+			:multiple="true"
 		/>
 		<n-select
 			placeholder="来源"
@@ -28,21 +37,21 @@
 			<span>人数</span>
 			<n-slider
 				v-model:value="player_num"
-				:min="1"
+				:min="0"
 				:max="10"
 				:tooltip="false"
 			/>
-			<span>{{ player_num }} 人</span>
+			<span>{{ player_num ? `${player_num} 人` : "不限" }}</span>
 		</div>
 		<div class="slider-wrap">
 			<span>时长</span>
 			<n-slider
 				v-model:value="player_hours"
-				:min="1"
-				:max="10"
+				:min="0"
+				:max="20"
 				:tooltip="false"
 			/>
-			<span>{{ player_hours }} 时</span>
+			<span>{{ player_hours ? `${player_hours} 时` : "不限" }} </span>
 		</div>
 		<div class="updateLastWeek-recommend-wrap">
 			<span
@@ -50,7 +59,7 @@
 				:class="
 					updateLastWeek
 						? 'updateLastWeek-recommend-item-active'
-						: unll
+						: null
 				"
 				@click="handleBtn(true)"
 				>上周更新</span
@@ -58,7 +67,7 @@
 			<span
 				class="updateLastWeek-recommend-item"
 				:class="
-					recommended ? 'updateLastWeek-recommend-item-active' : unll
+					recommended ? 'updateLastWeek-recommend-item-active' : null
 				"
 				@click="handleBtn()"
 				>编辑推荐</span
@@ -69,7 +78,7 @@
 		<span
 			class="card"
 			v-for="x in 18"
-			v-if="!Object.keys(search_result).length"
+			v-if="!Object.keys(search_result).length && !has_get_search_result"
 		></span>
 		<span
 			class="card"
@@ -138,8 +147,10 @@ const loadingBar = useLoadingBar();
 
 const search_result = ref({});
 
-const player_num = ref("");
-const player_hours = ref("");
+const has_get_search_result = ref(false); // 如果已经拿到了数据 就不应该再显示骨架屏
+
+const player_num = ref(0);
+const player_hours = ref(0);
 const catagory_list = [
 	{ label: "COC", value: "1" },
 	{ label: "DND", value: "2" },
@@ -182,8 +193,8 @@ async function search() {
 	const data = {
 		moduleAge: "",
 		occurrencePlace: "",
-		duration: player_hours.value,
-		amount: player_num.value,
+		duration: player_hours.value || "",
+		amount: player_num.value || "",
 		original: "",
 		releaseDateAsc: "",
 		moduleVersion: "",
@@ -196,16 +207,14 @@ async function search() {
 		updateLastWeek: Boolean(updateLastWeek.value) || "",
 		command: Boolean(recommended.value) || "",
 	};
-	console.log(data);
-	console.log(updateLastWeek.value);
 	const data_str = Object.keys(data)
 		.map((key, index) => `${key}=${Object.values(data)[index]}`)
 		.reduce((total, item) => total + "&" + item);
 	const url = `https://www.cnmods.net/index/moduleListPage.do?${data_str}`;
 	const resp = await fetch(url).then((response) => response.json());
-	console.log(url);
 	search_result.value = resp.data.list;
 	totalElements.value = resp.data.totalElements;
+	has_get_search_result.value = true; //表示已经拿到了数据
 	loadingBar.finish(); // 结束加载条
 }
 
@@ -220,21 +229,111 @@ watch(pageSize, search);
 (async () => {
 	search();
 })();
+
+// ANCHOR 级联选择 JS
+const options = [
+	{
+		value: "COC",
+		label: "COC",
+		leaf_only: false,
+		children: [
+			{
+				value: "version",
+				label: "版本",
+				children: [
+					{
+						value: "coc6th",
+						label: "coc6th",
+					},
+					{
+						value: "coc7th",
+						label: "coc7th",
+					},
+				],
+			},
+			{
+				value: "era",
+				label: "年代",
+				children: [
+					{
+						value: "future",
+						label: "未来",
+					},
+					{
+						value: "ancient",
+						label: "古代",
+					},
+				],
+			},
+		],
+	},
+];
+function handleSelectedCatagoryBlur() {
+	console.log(selected_catagory.value);
+}
+
+function debounce(func, wait = 0) {
+	let timeid = null;
+	let result;
+	return function () {
+		const context = this;
+		const args = arguments;
+		if (timeid) {
+			clearTimeout(timeid);
+		}
+		timeid = setTimeout(function () {
+			result = func.apply(context, args);
+		}, wait);
+
+		return result;
+	};
+}
+
+watch(player_num, debounce(search, 1000));
+watch(player_hours, debounce(search, 1000));
 </script>
 
 <style scoped>
+/* ANCHOR 搜索选项整体 */
 .search-options {
 	display: flex;
 	width: 840px;
 	margin: 10px auto 0;
-	padding-left: 5px;
+	transform: translateX(5px);
 	justify-content: space-between;
 }
 .search-options > * {
 	margin-right: 10px;
+	flex-grow: 1;
 	/* flex-shrink: 1; */
 }
-.n-select {
+@media (min-width: 1365px) {
+	.search-options {
+		width: 1300px;
+		margin: 30px auto 0;
+		padding: 0 10px 0 15px;
+		transform: none;
+	}
+}
+@media (max-width: 930px) {
+	.search-options {
+		max-width: 510px;
+		transform: translateX(5px);
+	}
+	.search-options {
+		display: flex;
+		flex-wrap: wrap;
+		width: calc(100% - 10px) !important;
+		margin: none;
+		padding-left: 0 !important;
+	}
+	.search-options > * {
+		margin-bottom: 10px;
+	}
+}
+/* ANCHOR 搜索选项里面的条目 */
+.n-select,
+.n-cascader {
 	flex-basis: 100px;
 }
 .slider-wrap {
@@ -258,12 +357,6 @@ watch(pageSize, search);
 	margin: 0 10px;
 }
 @media screen and (min-width: 1300px) {
-	.search-options {
-		display: flex;
-		width: 1300px;
-		margin: 30px auto 0;
-		padding: 0 10px 0 15px;
-	}
 	.n-select {
 		width: 200px;
 	}
@@ -291,8 +384,9 @@ watch(pageSize, search);
 .updateLastWeek-recommend-wrap {
 	display: flex;
 	flex-grow: 1;
-	margin-right: 5px;
+	/* margin-right: 5px; */
 	justify-content: space-between !important;
+	flex-basis: 240px;
 	/* 魔鬼数字 */
 }
 .updateLastWeek-recommend-item {

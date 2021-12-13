@@ -136,7 +136,8 @@
 				<div id="main">
 					<router-view></router-view>
 				</div>
-				<div id="footer">This is a footer.</div>
+				<!-- ANCHOR footer html -->
+				<Footer />
 			</div>
 		</n-loading-bar-provider>
 	</n-config-provider>
@@ -159,6 +160,7 @@ import {
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 import { zhCN } from "naive-ui";
+import Footer from "./components/Footer.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -222,6 +224,14 @@ body {
 	flex-direction: column;
 	padding: 30px 0;
 }
+/* ANCHOR 尝试解决苹果端100vh问题 */
+/* Avoid Chrome to see Safari hack */
+@supports (-webkit-touch-callout: none) {
+	#sidebar {
+		/* The hack for Safari */
+		height: -webkit-fill-available;
+	}
+}
 #sidebar + div {
 	width: calc(100vw - 60px);
 	background-color: #111;
@@ -230,7 +240,7 @@ body {
 	overflow-y: scroll;
 	height: 100vh;
 	min-height: 100vh;
-	background-image: radial-gradient(closest-corner at 50% 30%, #2d2d2d, #111);
+	/* background-image: radial-gradient(closest-corner at 50% 30%, #2d2d2d, #111); */
 }
 #header {
 	height: 80px;
@@ -287,7 +297,7 @@ body {
 	margin: 30px auto;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1365px) {
 	#card-wrap {
 		grid-template-columns: repeat(2, 50%);
 		width: 860px;
@@ -448,18 +458,9 @@ body {
 .pre-space {
 	white-space: pre;
 }
-#footer {
-	display: block;
-	height: 4rem;
-	background-color: #1c1c1c;
-	text-align: center;
-	position: relative;
-	line-height: 4rem;
-	font-family: "Courier New", Courier, monospace;
-	color: gray;
-}
+
 #main {
-	min-height: calc(100vh - 80px - 4rem);
+	min-height: calc(100vh - 80px - 3rem);
 }
 #mobile-header {
 	display: none;
@@ -471,7 +472,7 @@ body {
 	display: flex;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 930px) {
 	/* 这应该包括了ipad普通版在内的所有手机端 */
 	#sidebar {
 		display: none;
@@ -497,14 +498,11 @@ body {
 		height: 225px;
 		background: #1d1d1d;
 	}
-	.search-options,
+
 	.card {
 		max-width: 500px;
 	}
-	.search-options > * {
-		flex-grow: 1;
-		/* margin-right: 0 !important; */
-	}
+
 	.updateLastWeek-recommend-wrap > * {
 		/* margin-right: 0; */
 	}
@@ -530,16 +528,7 @@ body {
 		/* margin-right: 0 !important; */
 		margin: auto !important;
 	}
-	.search-options {
-		display: flex;
-		flex-wrap: wrap;
-		width: calc(100% - 20px) !important;
-		margin: none;
-		padding-left: 0 !important;
-	}
-	.search-options > * {
-		margin-bottom: 10px;
-	}
+
 	.search-options + #card-wrap {
 		margin-top: 10px;
 	}
