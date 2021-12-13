@@ -239,7 +239,7 @@ body {
 	left: 60px;
 	overflow-y: scroll;
 	height: 100vh;
-	min-height: 100vh;
+	min-height: -webkit-fill-available;
 	/* background-image: radial-gradient(closest-corner at 50% 30%, #2d2d2d, #111); */
 }
 #header {
@@ -460,7 +460,7 @@ body {
 }
 
 #main {
-	min-height: calc(100vh - 80px - 3rem);
+	min-height: -webkit-fill-available;
 }
 #mobile-header {
 	display: none;
