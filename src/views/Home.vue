@@ -190,4 +190,69 @@ function toPage(name, query) {
 	display: flex;
 	justify-content: center;
 }
+
+/* 轮播图 */
+
+.n-carousel {
+	--width: 1190px;
+	width: var(--width);
+	height: 297px;
+	margin-top: 20px;
+	border-radius: 5px;
+	display: inline-block;
+	position: relative;
+	margin-left: calc((100% - var(--width)) / 2);
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+@media screen and (max-width: 1365px) {
+	.n-carousel {
+		--width: 830px;
+		width: var(--width);
+		height: calc(var(--width) / 4);
+		margin-left: calc((100% - var(--width)) / 2);
+	}
+}
+/* 轮播图遮罩 */
+.carousel-mask {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: linear-gradient(
+		to bottom,
+		transparent 50%,
+		#00000063 100%
+	);
+	top: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 99;
+}
+.n-carousel > div > div > div {
+	/* mask的上一层 */
+	position: relative;
+}
+.carousel-mask > div {
+	/* hover mask 可以显示文字 */
+	font-size: 2rem;
+	font-weight: bold;
+	transition: 0.2s;
+	color: transparent;
+}
+.carousel-mask:hover + .carousel-img {
+	filter: brightness(0.5);
+}
+.carousel-mask:hover > div {
+	color: white;
+}
+
+@media (max-width: 930px) {
+	/* 这应该包括了ipad普通版在内的所有手机端 */
+	.n-carousel {
+		display: none;
+	}
+}
 </style>

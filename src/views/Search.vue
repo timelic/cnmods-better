@@ -19,19 +19,31 @@
 			v-model:value="selected_catagory"
 			:options="catagory_list"
 		/> -->
-		<!-- ANCHOR 级联选择 HTML -->
-		<n-cascader
-			v-model:value="selected_catagory"
-			placeholder="类别"
+		<!-- ANCHOR 下拉菜单 HTML -->
+		<n-dropdown
 			:options="options"
-			:leaf-only="false"
-			:on-blur="handleSelectedCatagoryBlur"
-			:multiple="true"
-		/>
+			placement="bottom-start"
+			:show="showDropdown"
+			@select="handleDownloadMenuSelect"
+			:ref="(el) => (dropdown = el)"
+		>
+			<n-select
+				:placeholder="selected_basic_category"
+				:show="false"
+				:value="
+					selected_basic_category !== '类别'
+						? selected_basic_category
+						: null
+				"
+				@click="handleClick"
+				@blur="handleDropdownMenuBlur"
+			/>
+		</n-dropdown>
 		<n-select
 			placeholder="来源"
 			v-model:value="source_catagory"
 			:options="source_list"
+			@update:value="search"
 		/>
 		<div class="slider-wrap">
 			<span>人数</span>
@@ -141,7 +153,7 @@
 
 <script setup>
 import { Search24Regular as SearchIcon } from "@vicons/fluent";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useLoadingBar } from "naive-ui";
 const loadingBar = useLoadingBar();
 
@@ -151,17 +163,12 @@ const has_get_search_result = ref(false); // 如果已经拿到了数据 就不�
 
 const player_num = ref(0);
 const player_hours = ref(0);
-const catagory_list = [
-	{ label: "COC", value: "1" },
-	{ label: "DND", value: "2" },
-	{ label: "其他", value: "3" },
-];
-const source_list = [
-	{ label: "原创", value: "1" },
-	{ label: "翻译", value: "2" },
-];
-const selected_catagory = ref(null);
 const source_catagory = ref(null);
+
+const source_list = [
+	{ label: "原创", value: true },
+	{ label: "翻译", value: false },
+];
 
 const updateLastWeek = ref(null);
 const recommended = ref(null);
@@ -188,90 +195,291 @@ function toPageByPath(path) {
 	router.push(path);
 }
 
-async function search() {
-	loadingBar.start(); // 启动加载条
-	const data = {
-		moduleAge: "",
-		occurrencePlace: "",
-		duration: player_hours.value || "",
-		amount: player_num.value || "",
-		original: "",
-		releaseDateAsc: "",
-		moduleVersion: "",
-		freeLevel: "",
-		structure: "",
-		title: input_value.value,
-		page: page.value,
-		pageSize: pageSize.value,
-		moduleType: "",
-		updateLastWeek: Boolean(updateLastWeek.value) || "",
-		command: Boolean(recommended.value) || "",
-	};
-	const data_str = Object.keys(data)
-		.map((key, index) => `${key}=${Object.values(data)[index]}`)
-		.reduce((total, item) => total + "&" + item);
-	const url = `https://www.cnmods.net/index/moduleListPage.do?${data_str}`;
-	const resp = await fetch(url).then((response) => response.json());
-	search_result.value = resp.data.list;
-	totalElements.value = resp.data.totalElements;
-	has_get_search_result.value = true; //表示已经拿到了数据
-	loadingBar.finish(); // 结束加载条
-}
+// ANCHOR 下拉菜单 JS
 
-// 分页的逻辑
-
-const page = ref(1);
-const pageSize = ref(18);
-const totalElements = ref();
-
-watch(page, search);
-watch(pageSize, search);
-(async () => {
-	search();
-})();
-
-// ANCHOR 级联选择 JS
-const options = [
+const initial_options = [
 	{
-		value: "COC",
-		label: "COC",
-		leaf_only: false,
+		label: "COC（默认）",
+		key: "COC",
+	},
+	{
+		label: "DND",
+		key: "DND",
+	},
+	{
+		label: "其它类型",
+		key: "其它类型",
+	},
+];
+const options = ref(initial_options);
+const COC_expand = [
+	{
+		label: "版本",
+		key: "版本",
 		children: [
 			{
-				value: "version",
-				label: "版本",
-				children: [
-					{
-						value: "coc6th",
-						label: "coc6th",
-					},
-					{
-						value: "coc7th",
-						label: "coc7th",
-					},
-				],
+				label: "coc6th",
+				key: "coc6th",
 			},
 			{
-				value: "era",
-				label: "年代",
-				children: [
-					{
-						value: "future",
-						label: "未来",
-					},
-					{
-						value: "ancient",
-						label: "古代",
-					},
-				],
+				label: "coc7th",
+				key: "coc7th",
+			},
+		],
+	},
+	{
+		label: "年代",
+		key: "年代",
+		children: [
+			{
+				label: "未来",
+				key: "未来",
+			},
+			{
+				label: "古代",
+				key: "古代",
+			},
+			{
+				label: "近代",
+				key: "近代",
+			},
+			{
+				label: "现代",
+				key: "现代",
+			},
+			{
+				label: "现代日本",
+				key: "现代日本",
+			},
+			{
+				label: "当代",
+				key: "当代",
+			},
+		],
+	},
+	{
+		label: "自由度",
+		key: "自由度",
+		children: [
+			{
+				label: "低",
+				key: "低",
+			},
+			{
+				label: "中",
+				key: "中",
+			},
+			{
+				label: "高",
+				key: "高",
+			},
+		],
+	},
+	{
+		label: "发生地",
+		key: "发生地",
+		children: [
+			{
+				label: "中国",
+				key: "中国",
+			},
+			{
+				label: "日本",
+				key: "日本",
+			},
+			{
+				label: "亚洲",
+				key: "亚洲",
+			},
+			{
+				label: "美洲",
+				key: "美洲",
+			},
+			{
+				label: "非洲",
+				key: "非洲",
+			},
+			{
+				label: "其它",
+				key: "其它",
+			},
+		],
+	},
+	{
+		label: "结构",
+		key: "结构",
+		children: [
+			{
+				label: "线性",
+				key: "线性",
+			},
+			{
+				label: "非线性",
+				key: "非线性",
 			},
 		],
 	},
 ];
-function handleSelectedCatagoryBlur() {
-	console.log(selected_catagory.value);
+
+const DND_expand = [
+	{
+		label: "版本",
+		key: "版本",
+		children: [
+			{
+				label: "3E",
+				key: "3E",
+			},
+			{
+				label: "3R",
+				key: "3R",
+			},
+			{
+				label: "4E",
+				key: "4E",
+			},
+			{
+				label: "5E",
+				key: "5E",
+			},
+		],
+	},
+	{
+		label: "等级",
+		key: "等级",
+		children: [
+			{
+				label: "1-4",
+				key: "1-4",
+			},
+			{
+				label: "5-10",
+				key: "5-10",
+			},
+			{
+				label: "11-16",
+				key: "11-16",
+			},
+			{
+				label: "17-20",
+				key: "17-20",
+			},
+			{
+				label: "20+",
+				key: "20+",
+			},
+			{
+				label: "Epic",
+				key: "Epic",
+			},
+		],
+	},
+];
+
+const selected_basic_category = ref("类别");
+let moduleVersion,
+	moduleAge,
+	occurrencePlace,
+	original,
+	freeLevel,
+	structure,
+	moduleType;
+// 获取次级目录里面的key的array 用来下面判断在哪个集合里面
+function getKeysIn2thCategory(category, category_2th_name) {
+	return category
+		.filter((item) => item.label === category_2th_name)[0]
+		.children.map((item) => item.key);
+}
+// 点击下拉菜单
+function handleDownloadMenuSelect(key) {
+	lock = false;
+	// 判断是不是基础选项
+	if (["COC", "DND", "其它类型"].includes(key)) {
+		switch (key) {
+			case "COC":
+				options.value = initial_options.concat(COC_expand);
+				selected_basic_category.value = "COC";
+				break;
+			case "DND":
+				options.value = initial_options.concat(DND_expand);
+				selected_basic_category.value = "DND";
+				break;
+			case "其它类型":
+				options.value = initial_options;
+				selected_basic_category.value = "其他";
+				showDropdown.value = false; // 隐藏下拉菜单
+				break;
+			default:
+				break;
+		}
+		// 清空原有的额外
+		moduleVersion =
+			moduleAge =
+			occurrencePlace =
+			original =
+			freeLevel =
+			structure =
+			moduleType =
+				"";
+	}
+	// 判断是不是额外选项
+	const COC_expand_keys = COC_expand.reduce(
+		(total, item) => total.concat(item.children),
+		[]
+	).map((item) => item.key);
+	const DND_expand_keys = DND_expand.reduce(
+		(total, item) => total.concat(item.children),
+		[]
+	).map((item) => item.key);
+	if (COC_expand_keys.includes(key)) {
+		switch (true) {
+			case getKeysIn2thCategory(COC_expand, "版本").includes(key):
+				moduleVersion = key;
+				break;
+			case getKeysIn2thCategory(COC_expand, "年代").includes(key):
+				moduleAge = key;
+				break;
+			case getKeysIn2thCategory(COC_expand, "自由度").includes(key):
+				freeLevel = key;
+				break;
+			case getKeysIn2thCategory(COC_expand, "发生地").includes(key):
+				occurrencePlace = key;
+				break;
+			case getKeysIn2thCategory(COC_expand, "结构").includes(key):
+				structure = key;
+				break;
+			default:
+				break;
+		}
+	}
+	if (DND_expand_keys.includes(key)) {
+		switch (true) {
+			case getKeysIn2thCategory(DND_expand, "版本").includes(key):
+				moduleVersion = key;
+				break;
+			case getKeysIn2thCategory(DND_expand, "等级").includes(key):
+				freeLevel = key;
+				break;
+			default:
+				break;
+		}
+	}
+	search();
 }
 
+// ANCHOR 下拉菜单的blur收起问题
+const showDropdown = ref(false);
+function handleClick() {
+	console.log("click");
+	showDropdown.value = !showDropdown.value;
+}
+let lock = false;
+function handleDropdownMenuBlur() {
+	lock = true;
+	setTimeout(() => {
+		if (lock) showDropdown.value = false;
+	}, 200);
+}
 function debounce(func, wait = 0) {
 	let timeid = null;
 	let result;
@@ -291,6 +499,60 @@ function debounce(func, wait = 0) {
 
 watch(player_num, debounce(search, 1000));
 watch(player_hours, debounce(search, 1000));
+
+// ANCHOR 搜索的JS逻辑
+async function search() {
+	loadingBar.start(); // 启动加载条
+	const data = {
+		moduleAge: moduleAge || "",
+		occurrencePlace: occurrencePlace || "",
+		duration: player_hours.value || "",
+		amount: player_num.value || "",
+		// original: ((value) => {
+		// 	if (typeof value !== "boolean" && !value) return "";
+		// 	return value;
+		// })(source_catagory.value),
+		original:
+			typeof source_catagory.value !== "boolean" && !source_catagory.value
+				? ""
+				: source_catagory.value,
+		releaseDateAsc: "",
+		moduleVersion: moduleVersion || "",
+		freeLevel: freeLevel || "",
+		structure: structure || "",
+		title: input_value.value,
+		page: page.value,
+		pageSize: pageSize.value,
+		moduleType:
+			selected_basic_category.value !== "类别"
+				? selected_basic_category.value
+				: "",
+		updateLastWeek: Boolean(updateLastWeek.value) || "",
+		command: Boolean(recommended.value) || "",
+	};
+	const data_str = Object.keys(data)
+		.map((key, index) => `${key}=${Object.values(data)[index]}`)
+		.reduce((total, item) => total + "&" + item);
+	const url = `https://www.cnmods.net/index/moduleListPage.do?${data_str}`;
+	console.log(url);
+	const resp = await fetch(url).then((response) => response.json());
+	search_result.value = resp.data.list;
+	totalElements.value = resp.data.totalElements;
+	has_get_search_result.value = true; //表示已经拿到了数据
+	loadingBar.finish(); // 结束加载条
+}
+
+// 分页的逻辑
+
+const page = ref(1);
+const pageSize = ref(18);
+const totalElements = ref();
+
+watch(page, search);
+watch(pageSize, search);
+(async () => {
+	search();
+})();
 </script>
 
 <style scoped>
@@ -433,5 +695,27 @@ watch(player_hours, debounce(search, 1000));
 .search-icon:active {
 	transform: scale(1);
 	opacity: 0.5;
+}
+
+/* 真实搜索框 */
+@media (max-width: 930px) {
+	/* 这应该包括了ipad普通版在内的所有手机端 */
+	#real-search {
+		position: relative !important;
+		display: flex;
+		width: 500px !important;
+		max-width: calc(100% - 20px) !important;
+		margin: auto !important;
+		top: 0 !important;
+	}
+	.search-options + #card-wrap {
+		margin-top: 10px;
+	}
+}
+
+/* 下拉菜单 */
+.n-dropdown-menu {
+	min-width: 169px;
+	/* 设置最小宽度 */
 }
 </style>

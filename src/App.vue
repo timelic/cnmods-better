@@ -29,7 +29,7 @@
 					</n-icon>
 					<span>投稿</span>
 				</span>
-				<span class="sidebar-item">
+				<span class="sidebar-item" @click="toPage('Favourite')">
 					<n-icon size="24">
 						<star />
 					</n-icon>
@@ -219,7 +219,6 @@ body {
 	height: 100vh;
 	position: fixed;
 	background: black;
-	border-right: 1px solid #1d1d1d;
 	display: flex;
 	flex-direction: column;
 	padding: 30px 0;
@@ -277,18 +276,6 @@ body {
 	filter: brightness(0.75);
 	transition: 0.2s;
 }
-.n-carousel {
-	--width: 1190px;
-	width: var(--width);
-	height: 297px;
-	margin-top: 20px;
-	border-radius: 5px;
-	display: inline-block;
-	position: relative;
-	margin-left: calc((100% - var(--width)) / 2);
-	cursor: pointer;
-	transition: 0.2s;
-}
 
 #card-wrap {
 	display: grid;
@@ -301,12 +288,6 @@ body {
 	#card-wrap {
 		grid-template-columns: repeat(2, 50%);
 		width: 860px;
-	}
-	.n-carousel {
-		--width: 830px;
-		width: var(--width);
-		height: calc(var(--width) / 4);
-		margin-left: calc((100% - var(--width)) / 2);
 	}
 }
 
@@ -392,39 +373,6 @@ body {
 	background-color: rgb(57 126 185 / 19%);
 	color: rgb(96 155 216);
 }
-.carousel-mask {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-image: linear-gradient(
-		to bottom,
-		transparent 50%,
-		#00000063 100%
-	);
-	top: 0;
-	left: 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	z-index: 99;
-}
-.n-carousel > div > div > div {
-	/* mask的上一层 */
-	position: relative;
-}
-.carousel-mask > div {
-	/* hover mask 可以显示文字 */
-	font-size: 2rem;
-	font-weight: bold;
-	transition: 0.2s;
-	color: transparent;
-}
-.carousel-mask:hover + .carousel-img {
-	filter: brightness(0.5);
-}
-.carousel-mask:hover > div {
-	color: white;
-}
 .back {
 	position: fixed;
 	left: 85px;
@@ -502,35 +450,11 @@ body {
 	.card {
 		max-width: 500px;
 	}
-
-	.updateLastWeek-recommend-wrap > * {
-		/* margin-right: 0; */
-	}
-	.n-carousel {
-		display: none;
-	}
-	#header .n-input {
-		/* width: calc(100% - 20px) !important; */
-	}
 	#header {
 		display: none;
 	}
 	.back {
 		display: none;
-	}
-	#real-search {
-		position: relative;
-		display: flex;
-		width: 500px !important;
-		max-width: calc(100% - 20px) !important;
-		/* max-width: 500px !important; */
-		/* margin-left: 10px !important; */
-		/* margin-right: 0 !important; */
-		margin: auto !important;
-	}
-
-	.search-options + #card-wrap {
-		margin-top: 10px;
 	}
 	.tags-wrap {
 		overflow: hidden;
@@ -573,10 +497,6 @@ body {
 	}
 	.module-title {
 		font-size: 2.5rem !important;
-	}
-	#real-search {
-		position: relative !important;
-		top: 0 !important;
 	}
 	#main {
 		padding: 10px 0;
