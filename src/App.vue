@@ -29,12 +29,12 @@
 					</n-icon>
 					<span>投稿</span>
 				</span>
-				<span class="sidebar-item" @click="toPage('Favourite')">
+				<!-- <span class="sidebar-item" @click="toPage('Favourite')">
 					<n-icon size="24">
 						<star />
 					</n-icon>
 					<span>收藏</span>
-				</span>
+				</span> -->
 				<span class="sidebar-item info" @click="toPage('About')">
 					<n-icon size="24">
 						<info />

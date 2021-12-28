@@ -76,7 +76,12 @@
 			<div class="module-part-subtitle" v-if="other_module.length">
 				该投稿人的其他投稿
 			</div>
-			<span class="card" v-for="item in other_module" :key="item">
+			<span
+				class="card"
+				v-for="item in other_module"
+				:key="item"
+				@click="toModuleByKeyId(item.keyId)"
+			>
 				<div class="title">{{ item.title }}</div>
 				<div class="name-and-date">
 					{{ item.article + "   " + item.releaseDate }}
@@ -116,6 +121,7 @@
 import { useRouter, useRoute } from "vue-router";
 import { ref } from "vue";
 const route = useRoute();
+const router = useRouter();
 import {
 	ArrowDownload20Filled as download,
 	Mail24Filled as mail,
@@ -124,13 +130,12 @@ import {
 import { useLoadingBar } from "naive-ui";
 const loadingBar = useLoadingBar();
 
-const keyId = route.params.keyId;
 const module_data = ref({});
-
+const keyId = route.params.keyId;
 const other_module = ref([]);
 
 // 获取数据
-(async () => {
+const fetchModuleData = async (keyId) => {
 	loadingBar.start(); // 启动加载条
 	const resp = await fetch(
 		`https://www.cnmods.net/index/moduleDetail.do?keyId=${keyId}`
@@ -142,10 +147,15 @@ const other_module = ref([]);
 		`https://www.cnmods.net/index/articleModules.do?keyId=${keyId}`
 	).then((response) => response.json());
 	other_module.value = res.data;
-	loadingBar.finish(); // 启动加载条
-})();
+	loadingBar.finish(); // 启动加载条}
+};
+fetchModuleData(keyId);
 function toUrl(url) {
 	window.open(url);
+}
+function toModuleByKeyId(keyId) {
+	router.push(`/module/${keyId}`);
+	fetchModuleData(keyId);
 }
 </script>
 

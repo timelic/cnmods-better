@@ -495,7 +495,7 @@ let lock = false;
 function handleDropdownMenuBlur() {
 	lock = true;
 	setTimeout(() => {
-		if (lock) showDropdown.value = false;
+		// if (lock) showDropdown.value = false;
 	}, 200);
 }
 function debounce(func, wait = 0) {
@@ -526,10 +526,6 @@ async function search() {
 		occurrencePlace: occurrencePlace || "",
 		duration: player_hours.value || "",
 		amount: player_num.value || "",
-		// original: ((value) => {
-		// 	if (typeof value !== "boolean" && !value) return "";
-		// 	return value;
-		// })(source_catagory.value),
 		original:
 			typeof source_catagory.value !== "boolean" && !source_catagory.value
 				? ""
