@@ -11,6 +11,12 @@
 		做这个网站的初衷，第一是把界面优化一下（官方站那个不知道是谁的审美），第二是想弄一个模组收藏功能，方便我自己用。
 		大概这里会覆盖所有官方站的功能，但是现在还很不完善，搜索功能是有问题的，不能翻页什么的。以后再说吧。
 	</div>
+	<div class="module-part">
+		<div class="module-part-subtitle">作者声明</div>
+		<div class="module-part-content">
+			这个网站只是为提供一个更好的魔都网站，并没有任何侵犯版权，攫取流量的意图。如有冒犯，我只能说很抱歉。
+		</div>
+	</div>
 </template>
 
 <style scoped>

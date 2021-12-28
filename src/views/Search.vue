@@ -153,8 +153,10 @@
 
 <script setup>
 import { Search24Regular as SearchIcon } from "@vicons/fluent";
-import { ref, watch, onMounted } from "vue";
-import { useLoadingBar } from "naive-ui";
+import { ShieldFilled } from "@vicons/material";
+import { DiceD20 } from "@vicons/fa";
+import { ref, watch, h } from "vue";
+import { useLoadingBar, NIcon } from "naive-ui";
 const loadingBar = useLoadingBar();
 
 const search_result = ref({});
@@ -196,7 +198,13 @@ function toPageByPath(path) {
 }
 
 // ANCHOR 下拉菜单 JS
-
+const renderIcon = (icon) => {
+	return () => {
+		return h(NIcon, null, {
+			default: () => h(icon),
+		});
+	};
+};
 const initial_options = [
 	{
 		label: "COC（默认）",
@@ -209,6 +217,12 @@ const initial_options = [
 	{
 		label: "其它类型",
 		key: "其它类型",
+	},
+];
+const extra_option_hint = [
+	{
+		label: "额外选项",
+		disabled: true,
 	},
 ];
 const options = ref(initial_options);
@@ -397,11 +411,15 @@ function handleDownloadMenuSelect(key) {
 	if (["COC", "DND", "其它类型"].includes(key)) {
 		switch (key) {
 			case "COC":
-				options.value = initial_options.concat(COC_expand);
+				options.value = initial_options
+					.concat(extra_option_hint)
+					.concat(COC_expand);
 				selected_basic_category.value = "COC";
 				break;
 			case "DND":
-				options.value = initial_options.concat(DND_expand);
+				options.value = initial_options
+					.concat(extra_option_hint)
+					.concat(DND_expand);
 				selected_basic_category.value = "DND";
 				break;
 			case "其它类型":
