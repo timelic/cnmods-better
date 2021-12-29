@@ -14,17 +14,13 @@
 		</template>
 	</n-input>
 	<div class="search-options">
-		<!-- <n-select
-			placeholder="类别"
-			v-model:value="selected_catagory"
-			:options="catagory_list"
-		/> -->
 		<!-- ANCHOR 下拉菜单 HTML -->
 		<n-dropdown
 			:options="options"
 			placement="bottom-start"
 			:show="showDropdown"
-			@select="handleDownloadMenuSelect"
+			@select.self="handleDownloadMenuSelect"
+			@clickoutside="test"
 			:ref="(el) => (dropdown = el)"
 		>
 			<n-select
@@ -35,8 +31,7 @@
 						? selected_basic_category
 						: null
 				"
-				@click="handleClick"
-				@blur="handleDropdownMenuBlur"
+				@click.stop="handleClick"
 			/>
 		</n-dropdown>
 		<n-select
@@ -153,9 +148,7 @@
 
 <script setup>
 import { Search24Regular as SearchIcon } from "@vicons/fluent";
-import { ShieldFilled } from "@vicons/material";
-import { DiceD20 } from "@vicons/fa";
-import { ref, watch, h } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useLoadingBar, NIcon } from "naive-ui";
 const loadingBar = useLoadingBar();
 
@@ -197,13 +190,7 @@ function toPageByPath(path) {
 }
 
 // ANCHOR 下拉菜单 JS
-const renderIcon = (icon) => {
-	return () => {
-		return h(NIcon, null, {
-			default: () => h(icon),
-		});
-	};
-};
+
 const initial_options = [
 	{
 		label: "COC（默认）",
@@ -220,8 +207,8 @@ const initial_options = [
 ];
 const extra_option_hint = [
 	{
-		label: "额外选项",
-		disabled: true,
+		type: "divider",
+		key: "---",
 	},
 ];
 const options = ref(initial_options);
@@ -405,7 +392,6 @@ function getKeysIn2thCategory(category, category_2th_name) {
 }
 // 点击下拉菜单
 function handleDownloadMenuSelect(key) {
-	lock = false;
 	// 判断是不是基础选项
 	if (["COC", "DND", "其它类型"].includes(key)) {
 		switch (key) {
@@ -488,13 +474,10 @@ function handleDownloadMenuSelect(key) {
 const showDropdown = ref(false);
 function handleClick() {
 	showDropdown.value = !showDropdown.value;
+	return false;
 }
-let lock = false;
-function handleDropdownMenuBlur() {
-	lock = true;
-	setTimeout(() => {
-		// if (lock) showDropdown.value = false;
-	}, 200);
+function test() {
+	showDropdown.value = false;
 }
 function debounce(func, wait = 0) {
 	let timeid = null;
