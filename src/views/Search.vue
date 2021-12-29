@@ -21,7 +21,6 @@
 			:show="showDropdown"
 			@select.self="handleDownloadMenuSelect"
 			@clickoutside="test"
-			:ref="(el) => (dropdown = el)"
 		>
 			<n-select
 				:placeholder="selected_basic_category"
