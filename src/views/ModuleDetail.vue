@@ -141,7 +141,6 @@ const fetchModuleData = async (keyId) => {
 		`https://www.cnmods.net/index/moduleDetail.do?keyId=${keyId}`
 	).then((response) => response.json());
 	module_data.value = resp.data;
-	console.log(resp.data);
 	// 这个后端是不是nt啊 怎么写的
 	const res = await fetch(
 		`https://www.cnmods.net/index/articleModules.do?keyId=${keyId}`

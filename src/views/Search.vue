@@ -187,7 +187,6 @@ function handleBtn(p) {
 		if (recommended.value) recommended.value = false;
 		else recommended.value = true;
 	}
-	console.log("click");
 	search();
 }
 
@@ -488,7 +487,6 @@ function handleDownloadMenuSelect(key) {
 // ANCHOR 下拉菜单的blur收起问题
 const showDropdown = ref(false);
 function handleClick() {
-	console.log("click");
 	showDropdown.value = !showDropdown.value;
 }
 let lock = false;
@@ -548,7 +546,6 @@ async function search() {
 		.map((key, index) => `${key}=${Object.values(data)[index]}`)
 		.reduce((total, item) => total + "&" + item);
 	const url = `https://www.cnmods.net/index/moduleListPage.do?${data_str}`;
-	console.log(url);
 	const resp = await fetch(url).then((response) => response.json());
 	search_result.value = resp.data.list;
 	totalElements.value = resp.data.totalElements;

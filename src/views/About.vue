@@ -6,23 +6,22 @@
 		/>
 		<p class="about-title">作者声明</p>
 		<p class="about-content">
-			这个网站只是为提供一个更好的魔都网站，并没有任何侵犯版权，攫取流量的意图。如有冒犯，我只能说很抱歉。
+			这个网站只是为提供一个更好的魔都网站，并没有任何侵犯版权、争夺流量的意图。如有冒犯，我很抱歉。
 		</p>
 		<p class="about-content">
 			官方站是
-			<a class="open-source" href="cnmods.net">cnmods.net</a>。
+			<a class="open-source" href="//cnmods.net">cnmods.net</a>。
 		</p>
 		<p class="about-title">吐槽</p>
 		<p class="about-content">
-			记得几年以前，站主出了一个众筹，说想做一个更好的网站，有更多的功能。我不记得后来筹了多少钱，但是这程序员雇的，确实不行。
+			记得几年以前，站主出了一个众筹，说想做一个更好的网站，有更多的功能。当时挺想帮忙的，但是还不会写代码。
 		</p>
 		<p class="about-content">
-			做这个网站的本意一是为了练手，二是觉得魔都cnmods.net主站做的不太行。
+			做这个网站的本意一是为了练手，二是满足自己写点东西填充下仓库。
 		</p>
 		<p class="about-content">
-			主站的前端一直没有什么优化，而后端也存在很严重的安全问题。
+			也希望主站能优化一下前端，改善下后端的安全问题。
 		</p>
-		<p class="about-content">当然我自己的技术也挺差劲。</p>
 		<p class="about-content">
 			这个网站还有许多值得改进的地方，比如说增加收藏模组功能。但评分功能是不会做的。
 		</p>
@@ -64,6 +63,7 @@ div {
 	}
 }
 .about-title {
+	font-family: "Microsoft Yahei";
 	font-size: 1.25rem;
 	font-weight: bold;
 }
