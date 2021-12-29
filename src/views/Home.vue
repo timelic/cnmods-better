@@ -13,9 +13,9 @@
 	</n-carousel>
 	<!-- 手机版显示一张头图 -->
 	<img
-		src="https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f419/u1f419_u1f31c.png"
+		src="https://www.gstatic.com/android/keyboard/emojikitchen/20210521/u1f34b/u1f34b_u1f419.png"
 		style="
-			height: 150px;
+			height: 100px;
 			margin: 20px auto;
 			filter: brightness(0.9);
 			user-select: none;
